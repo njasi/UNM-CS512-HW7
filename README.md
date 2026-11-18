@@ -10,30 +10,48 @@ hw7.htmlDownload hw7.html
 
 Here is the starter code. It covers a sphere with diffuse surface and a cube with reflective surface. You can reuse the primitives, or implement your new primitives.
 
-1. Ray tracing with local Phong, shadow, reflection and refraction (10 pts)
+- [] Ray tracing with local Phong, shadow, reflection and refraction (10 pts) 
+    
+    At least one geometry is transparent and glass-like (refraction). All the geometries need to be rendered through ray tracing with recursive process (use loop to simulate the recursive process as GLSL doesn't support recursive functions).
 
-At least one geometry is transparent and glass-like (refraction). All the geometries need to be rendered through ray tracing with recursive process (use loop to simulate the recursive process as GLSL doesn't support recursive functions).
+    - [] local illumination (Phong). It is fine to only have Phong model partially implemented in order to get a more visually appealing effect. (1/11)
+    - [x] ray traced shadow (2/11)
+    - [x] intersections (2/11)
+    - [x] reflection (2/11)
+    - [x] refraction (3/11) (It is fine to use any of "**choose**, blend or **sample**" refraction approaches we covered in class)
+    - attenuation is not necessary but encouraged.
 
-    local illumination (Phong). It is fine to only have Phong model partially implemented in order to get a more visually appealing effect. (1/11)
-    ray traced shadow (2/11)
-    intersections (2/11)
-    reflection (2/11)
-    refraction (3/11) (It is fine to use any of "choose, blend or sample" refraction approaches we covered in class)
-    attenuation is not necessary but encouraged.
-
-2. Multiple light sources (2 pts)
+- [x] Multiple light sources (2 pts)
+    - []
 
 3. Interactive user interface and movements (1 pts)
-
-At least two additional user interfaces to control parameters or movements (e.g. bounce steps, lighting intensity, shininess, attenuation, etc.) 
+- [x] Scene editor allows updates to every object, material, light, shader program etc
+    
+    At least two additional user interfaces to control parameters or movements (e.g. bounce steps, lighting intensity, shininess, attenuation, etc.) 
 
 4. Outstanding visually effects or animation ( +1 bonus pts)
 
 5. Your homework must be hosted on GitHub Pages (or another hosting service) so the TA/instructor can directly see the canvas by clicking on the link. Please submit the GitHub Pages link that opens your scene right away, not the link to your GitHub repository
 
 ## Files of interest to the grader
-- 
-
+- Ray Tracer Shaders
+    - [PotatoEngine/src/shaders/fragment/ray.frag](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/shaders/fragment/ray.frag)
+    - [PotatoEngine/src/shaders/vertex/ray.vert](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/shaders/vertex/ray.vert)
+- Ray Trader Shader Renderpass Setup
+    - [PotatoEngine/src/shaders/RayShaderProgram.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/shaders/RayShaderProgram.js)
+    - [PotatoEngine/src/renderers/RayRenderPass.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/renderers/RayRenderPass.js)
+    - [PotatoEngine/src/renderers/raytracing.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/renderers/raytracing.js)
+- Ray Tracer Object / Light / Material management
+    - [PotatoEngine/src/renderers/raytracing.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/renderers/raytracing.js) (the below are managed in this one)
+    - [PotatoEngine/src/objects/RayObject.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/objects/RayObject.js)
+    - [PotatoEngine/src/materials/RayMaterial.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/materials/RayMaterial.js)
+    - [PotatoEngine/src/materials/RayTextureDescriptor.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/materials/RayTextureDescriptor.js)
+    - [PotatoEngine/src/materials/Texture2DArray.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/materials/Texture2DArray.js)
+- Scene Management (same structure as previous assignments)
+    - [PotatoEngine/src/Scene.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/Scene.js)
+- Misc    
+    - [PotatoEngine/src/util/transformations.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/util/transformations.js) updated to add mat4 inverse, mat3 transpose mat4 to mat3.
+    - [PotatoEngine/src/controls/sceneEditor.js](https://github.com/njasi/UNM-CS512-PotatoEngine/blob/main/src/controls/sceneEditor.js) Built in scene editing / debug tabs
 ## Development
 
 ```sh
