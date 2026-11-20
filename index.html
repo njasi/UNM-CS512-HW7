@@ -124,6 +124,9 @@
         <code>Shift</code>
       </li>
       <li>
+        Increase / Decrease the speed of the camera with <code>Q</code> / <code>E</code>
+      </li>
+      <li>
         Try the scene editor / debugger tabs to change an object's material or preview a texture.
       </li>
     </ul>
@@ -181,8 +184,7 @@ layout(std140) uniform objectBlock {
 // js end, for now we say they are all objects...
 layout(std140) uniform lightBlock {
   Object lights[MAX_LIGHTS];
-};
-      </pre>
+};</pre>
     <h3>Textures</h3>
     <p>The handling of textures is not very interesting, but it is worth noting before we cover materials. When you're
       working with textures in webgl you bind texture information to bind points and then your shader can read the
@@ -220,14 +222,13 @@ layout(std140) uniform lightBlock {
     </p>
 
     <pre>
-    struct Material {
-      vec4 ka; // w unused (xyz => ambient color of normal mat, light color, glass color, reflective color)
-      vec4 kd; // w unused
-      vec4 ks; // w unused 
-      vec4 optics; // specular, refractiveIndex, reflectivity
-      uvec4 textures; // see below section (why this struct is defined early)
-    };
-  </pre>
+struct Material {
+  vec4 ka; // w unused (xyz => ambient color of normal mat, light color, glass color, reflective color)
+  vec4 kd; // w unused
+  vec4 ks; // w unused 
+  vec4 optics; // specular, refractiveIndex, reflectivity
+  uvec4 textures; // see below section (why this struct is defined early)
+};</pre>
     <p>
       After some consideration this lead to the above <code>Material</code> struct. It resembles a basic phong material
       with some optics information tacked on, and the interesting (or overkill depending on how you look at it) part is
@@ -264,8 +265,7 @@ uint packTexDescriptor(
     ((blendMode & 7u) << 1u) |
     ((textureType & 15u) << 4u) |
     ((textureIndex & 255u) << 8u);
-}
-    </pre>
+}</pre>
     <p>
       This descriptor layout takes up 16 bits, so with 32 bit precision we can store 8 different texture descriptors in
       a single <code>uvec4</code>. Of course this was completely unnecessary, but it was an interesting exercise, and
@@ -300,8 +300,7 @@ vec4 checkerTexture(vec2 uv, vec4 colorA, vec4 colorB, float scale) {
 // our black and white tile texture
 vec4 blackWhiteTiles(vec2 uv) {
   return checkerTexture(uv, vec4(0.f, 0.f, 0.f, 1.0f), vec4(1.0f), 2.f);
-}
-      </pre>
+}</pre>
     </p>
 
     <h2>Transmittance</h2>
@@ -312,6 +311,11 @@ vec4 blackWhiteTiles(vec2 uv) {
       include reflection and refraction in a complete model, but this usually falls to path tracing as it is easiest to
       trace from the light source to the end light position rather than backwards in our model. I've implemented a
       couple modes of "transmittance" that "work" by altering our shadow tracing model slightly.
+    </p>
+
+    <p>
+      The simple glass mode produces pretty reasonable results, but the TIR mode is notably lacking... Overall I prefer
+      the fast glass mode which just shoots the rays straight through the glass tinting as it goes.
     </p>
 
     <h2>Optimizations</h2>
@@ -371,6 +375,16 @@ layout(std140) uniform lightTransformBlock {
       Now we do not need to compute these transformations every time, this gave a significant boost to my initial
       basic implementation (1 fps back to ~10 fps at two bounces). However, we still have to transform a ray into the
       space of an object to test intersection between the two even if they are not anywhere close to intersecting.
+    </p>
+
+    <h4>Cache Passing</h4>
+    <p>
+      This is not really worth mentioning, but the performance difference was quite amusing to me. In my initial
+      implementation I simply passed the entire <code>ObjectTransformCache</code> along with the object, however this
+      tanked the performance. In the previous section we note jumping to 10 fps, but when passing the entire struct
+      the jump was actually only 3 fps. This made me question everything and I changed it so we simply pass around the
+      object's index and look up the cache as we need it. Usually this isnt an issue, because most languages have some
+      sort of pointer setup allowing us to pass a couple bytes for an object of any size.
     </p>
 
     <h4>Rough Intersection Test</h4>
