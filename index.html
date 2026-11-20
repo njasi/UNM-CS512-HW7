@@ -13,7 +13,7 @@
 
 
   <!-- project specific script & style -->
-  <script defer src="./dist/bundle.js"></script>
+  <!-- <script defer src="./dist/bundle.js"></script> -->
   <link href="./public/bs5.css" rel="stylesheet" />
 
   <style>
@@ -229,9 +229,9 @@ layout(std140) uniform lightBlock {
     };
   </pre>
     <p>
-      After some consideration this lead to the above material struct. It resembles a basic phong material with some
-      optics information tacked on, and the interesting (or overkill depending on how you look at it) part is in the
-      last member which identifies the layers of textures in the material.
+      After some consideration this lead to the above <code>Material</code> struct. It resembles a basic phong material
+      with some optics information tacked on, and the interesting (or overkill depending on how you look at it) part is
+      in the last member which identifies the layers of textures in the material.
     </p>
 
     <h4>Texture Descriptors</h4>
@@ -274,13 +274,14 @@ uint packTexDescriptor(
     <p>
       When calculating Material information we unpack all this information with bit shifts and masking and then act on
       it. For example if we see that the first bit represents a function then we look up the function and run it rather
-      than sampling from a texture. Above you can see this in action with the missingTextureDescriptor which says to use
-      function 255 as a albedo layer and blend it as a normal layer (ie replace what is below it).
+      than sampling from a texture. Above you can see this in action with the <code>missingTextureDescriptor</code>
+      which says to use function <code>255</code> as a albedo layer and blend it as a normal layer (ie replace what is
+      below it).
     </p>
     <p>
-      A texture descriptor is labeled as disabled by setting the blend mode to 0. Since webgl blocks are filled with 0s
-      by default this allows us to not worry about materials without textures doing weird things. Although it is better
-      to explicitly pack the 0 value in there, this is good enough for now.
+      A texture descriptor is labeled as disabled by setting the blend mode to <code>0</code>. Since webgl blocks are
+      filled with 0s by default this allows us to not worry about materials without textures doing weird things.
+      Although it is better to explicitly pack the 0 value in there, this is good enough for now.
     </p>
 
     <h4>Procedural Textures</h4>
@@ -305,7 +306,12 @@ vec4 blackWhiteTiles(vec2 uv) {
 
     <h2>Transmittance</h2>
     <p>
-      TODO
+      In the starter code provided to us we use a shadow ray casting model which works by casting a ray from an object
+      towards a light in the scene. To get light to pass through glass and become tinted you need to implement a form of
+      transmittance which is essentially how the color of light is effected by moving through a material. This should
+      include reflection and refraction in a complete model, but this usually falls to path tracing as it is easiest to
+      trace from the light source to the end light position rather than backwards in our model. I've implemented a
+      couple modes of "transmittance" that "work" by altering our shadow tracing model slightly.
     </p>
 
     <h2>Optimizations</h2>
@@ -321,9 +327,131 @@ vec4 blackWhiteTiles(vec2 uv) {
       All of the functionality worked reasonably well on my phone before any optimization at all.
     </p>
 
+    <h3>Object Transformation</h3>
+    <p>
+      One way to transform an object in a ray traced scene is to transform the incoming ray from world space to the
+      local object space. Note that the transformation needed here is the same as needed for hierarchical modeling, you
+      can kind of think of it like the ray becoming a child of the object.
+    </p>
+
+    <p>
+      Unfortunately while simple, this means in a naive implementation we need to transform every ray into the space of
+      every object which is the multiplication of the inverse of the object's transformation matrix and the ray. The
+      resulting normal from the intersection also has to be transformed from object space back into world space so we
+      can use it while rendering in terms of the world. This becomes especially costly when you need to sample multiple
+      times per pixel.
+    </p>
+
+    <h4>Caching The Transformations</h4>
+    <p>
+      One simple way to alleviate this issue is to compute both transformations for each object instead of computing
+      them at runtime. This could be done in the fragment shader, but we would still need to calculate the values once
+      per fragment, while the matrices won't vary between fragments in a single frame. To calculate them once per frame
+      we can calculate them on the CPU and use a buffer to pass them to the shader.
+    </p>
+    <pre>
+// we want to avoid calculating the inverse for every single ray as
+// this won't change within a pass, so we can calculate it once at 
+// the start of each pass on the cpu
+
+struct ObjectTransformCache {
+  mat4 invTransform;
+  mat3 invNormalTransform;
+};
+
+layout(std140) uniform objectTransformBlock {
+  ObjectTransformCache objTransformCache[MAX_OBJECTS];
+};
+
+layout(std140) uniform lightTransformBlock {
+  ObjectTransformCache lightTransformCache[MAX_LIGHTS];
+};</pre>
+
+    <p>
+      Now we do not need to compute these transformations every time, this gave a significant boost to my initial
+      basic implementation (1 fps back to ~10 fps at two bounces). However, we still have to transform a ray into the
+      space of an object to test intersection between the two even if they are not anywhere close to intersecting.
+    </p>
+
+    <h4>Rough Intersection Test</h4>
+    <p>
+      One common way to make intersections cheaper is by first doing a test intersection with a simple object such as a
+      sphere which inscribes the actual target. This way we can test against a sphere rather than a potentially
+      expensive target, and in our case we can even avoid transforming the ray into object space to check against our
+      test sphere.
+    </p>
+    <pre>
+// all encompassing object layout passed from js.
+struct Object {
+  ivec4 meta;         
+  vec4 centerRadius; 
+  vec4 options;      
+  // center of the object transformed into world space so we 
+  // can check rays against it rather than needing to always 
+  // transform into object space 
+  vec4 testCenterRadius; .xyz => center, .w => radius
+};</pre>
+    <p>
+      You may have noticed an extra field earlier in the Object struct <code>testCenterRadius</code>. We calculate this
+      in on the CPU in JS by applying the object's transformation against the center point. Since the this test center
+      point has the transformation applied it will be at the true center of the object, but already in world space!
+      The radius of the bounding sphere is calculated differently for every target primitive to ensure it inscribes the
+      object.
+    </p>
+    <pre>
+// check against cheap sphere before doing expensive ray transforms
+Sphere test = Sphere(obj.testCenterRadius.xyz, obj.testCenterRadius.w);
+float testT;
+if(!intersectSphere(test, worldRay, testT)) {
+  return false;
+}</pre>
+    <p>
+      This was a huge performance saver, bumping me all the way back up to 30fps at 2 ray bounces. Unfortunately, if we
+      get close to an object all rays have to be converted into its object space and we drop back down to 10 fps.
+    </p>
+
+    <h4>Translation Only Flag</h4>
+    <p>
+      When you scale, rotate or shear an object it is clear that we need to transform the ray to check intersection
+      against the object. However, translation (and mirroring in some cases) does not alter the shape of the object,
+      it simply shifts the centerpoint. Therefore we can avoid transforming the ray and check for object intersection
+      using the test center point from the previous optimization as the real center of the object as it already has the
+      translation applied.
+    </p>
+    <pre>
+// check against cheap sphere before doing expensive ray transforms
+Sphere test = Sphere(obj.testCenterRadius.xyz, obj.testCenterRadius.w);
+float testT;
+if(obj.meta.w != OBJECT_TRANSFORM_TRANSLATE_ONLY && !intersectSphere(test, worldRay, testT)) {
+  return false;
+}
+
+// transform ray to local object space...
+Ray localRay;
+vec3 center;
+
+// if we have only performed translation then we can just use the 
+// precalculated test point
+// note that we can avoid the above intersect as well
+if(obj.meta.w == OBJECT_TRANSFORM_TRANSLATE_ONLY) {
+  center = obj.testCenterRadius.xyz;
+  localRay = worldRay;
+} else {
+  center = obj.centerRadius.xyz;
+  localRay = toObjectSpace(worldRay, otc, light);
+}</pre>
+    <p>
+      This translation only flag helps a lot, especially with an infinite ground plane.
+    </p>
+    <p>
+      Notice that we can get an additional (small) savings since there is no need to use the test sphere above, since
+      it's main purpose is to avoid ray transformation. Although some intersections are more expensive (notably my torus
+      intersection) and it is useful to have a bounding sphere check on them anyway.
+    </p>
+
     <h2>Conclusions</h2>
     <p>
-      TODO
+      My head hurts.
     </p>
 
   </main>

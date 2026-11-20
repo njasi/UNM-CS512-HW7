@@ -24,14 +24,14 @@ Here is the starter code. It covers a sphere with diffuse surface and a cube wit
 - [x] Multiple light sources (2 pts)
     - []
 
-3. Interactive user interface and movements (1 pts)
-- [x] Scene editor allows updates to every object, material, light, shader program etc
+- Interactive user interface and movements (1 pts)
+    - [x] Scene editor allows updates to every object, material, light, shader program etc
     
     At least two additional user interfaces to control parameters or movements (e.g. bounce steps, lighting intensity, shininess, attenuation, etc.) 
 
-4. Outstanding visually effects or animation ( +1 bonus pts)
+- Outstanding visually effects or animation ( +1 bonus pts)
 
-5. Your homework must be hosted on GitHub Pages (or another hosting service) so the TA/instructor can directly see the canvas by clicking on the link. Please submit the GitHub Pages link that opens your scene right away, not the link to your GitHub repository
+- Your homework must be hosted on GitHub Pages (or another hosting service) so the TA/instructor can directly see the canvas by clicking on the link. Please submit the GitHub Pages link that opens your scene right away, not the link to your GitHub repository
 
 ## Files of interest to the grader
 - Ray Tracer Shaders
