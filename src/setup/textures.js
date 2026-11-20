@@ -11,10 +11,10 @@ export const PROCEDURAL_TEXTURE_SET =
  * @param {Scene} scene
  */
 export function addTextures(scene) {
-  let textureSet = new Texture2DArray(scene.gl, 1920, 1920, 10, {
+  let textureSet = new Texture2DArray(scene.gl, 1024, 1024, 10, {
     label: IMAGE_TEXTURE_SET,
   });
-  textureSet.load("./public/textures/image.png", 0);
-  textureSet.load("./public/textures/image.png", 1);
+  textureSet.load("./public/textures/wallpaper_dino_1024.png", 0);
+  textureSet.load("./public/textures/carpet_blue_1024.jpg", 1);
   scene.addTexture(IMAGE_TEXTURE_SET, textureSet, { load: false });
 }

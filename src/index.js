@@ -4,16 +4,24 @@ const {
   makeEditorTabs,
   syncProperties,
 } = require("PotatoEngine/src/controls/sceneEditor");
-const { addRayTracingRenderPass } = require("PotatoEngine/src/renderers");
+const {
+  addRayTracingRenderPass,
+  ProceduralMaterialRenderPass,
+} = require("PotatoEngine/src/renderers");
 
-const { addMaterials } = require("./setup/materials");
+const { addMaterials, PROCEDURAL_MATERIALS } = require("./setup/materials");
 const { addTextures } = require("./setup/textures");
 const { initSceneObjects } = require("./setup/objects");
-const { addPrograms } = require("./setup/programs");
-const { addRenderPasses } = require("./setup/passes");
+const {
+  addPrograms,
+  SHADER_PROGRAM_RAY,
+  SHADER_PROGRAM_PROCEDURAL,
+} = require("./setup/programs");
+const { ProceduralMaterial } = require("PotatoEngine/src/materials");
 
 const scene = new Scene("glcanvas");
 scene.camera.fov = 0.6;
+scene.camera.speed = 20;
 
 flight.setupMouseControls(scene, {
   scalePitch: 1,
@@ -40,9 +48,14 @@ scene.setUpdateCB(updateScene);
  */
 async function main() {
   addPrograms(scene);
-  addRenderPasses(scene);
-  addTextures(scene);
+  addRayTracingRenderPass(scene, SHADER_PROGRAM_RAY);
   addMaterials(scene);
+  addTextures(scene);
+  ProceduralMaterialRenderPass.add(scene, {
+    width: 512,
+    height: 512,
+    materials: PROCEDURAL_MATERIALS,
+  });
   await scene.load();
 
   initSceneObjects(scene);
