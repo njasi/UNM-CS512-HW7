@@ -15,13 +15,15 @@ const { initSceneObjects } = require("./setup/objects");
 const {
   addPrograms,
   SHADER_PROGRAM_RAY,
-  SHADER_PROGRAM_PROCEDURAL,
 } = require("./setup/programs");
 const { ProceduralMaterial } = require("PotatoEngine/src/materials");
 
 const scene = new Scene("glcanvas");
 scene.camera.fov = 0.6;
 scene.camera.speed = 20;
+scene.camera.move(-25,-1,-22)
+scene.camera.yaw = 0.8
+scene.camera.pitch = 0.1
 
 flight.setupMouseControls(scene, {
   scalePitch: 1,
@@ -62,10 +64,7 @@ async function main() {
 
   makeEditorTabs(scene);
 
-  // setInterval(() => {
-  //   syncProperties();
-  //   scene.render();
-  // }, 30);
+  scene.getProgram(SHADER_PROGRAM_RAY).uniforms.u_ambientStrength = 0.001;
   requestAnimationFrame(scene.render);
 }
 

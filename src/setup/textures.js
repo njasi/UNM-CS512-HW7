@@ -16,5 +16,11 @@ export function addTextures(scene) {
   });
   textureSet.load("./public/textures/wallpaper_dino_1024.png", 0);
   textureSet.load("./public/textures/carpet_blue_1024.jpg", 1);
+  textureSet.load("./public/textures/milky_1024.jpg", 2);
+  textureSet.load("./public/textures/stars_1_1024.jpg", 3);
+  textureSet.load("./public/textures/stars_2_1024.jpg", 4);
+  textureSet.load("./public/textures/stars_3_1024.jpg", 5);
+  textureSet.load("./public/textures/stars_cartoon_1024.jpg", 6);
+  textureSet.load("./public/textures/milky_1024.jpg", 7);
   scene.addTexture(IMAGE_TEXTURE_SET, textureSet, { load: false });
 }
