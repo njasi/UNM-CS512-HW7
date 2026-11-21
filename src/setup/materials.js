@@ -25,6 +25,30 @@ export const MAT_STAR3 = "MAT_STAR3";
 export const MAT_STAR4 = "MAT_STAR4";
 export const MAT_STAR5 = "MAT_STAR5";
 
+export const MAT_PAINTING = "MAT_PAINTING";
+export const MAT_PAINTING0 = "MAT_PAINTING0";
+export const MAT_PAINTING1 = "MAT_PAINTING1";
+export const MAT_PAINTING2 = "MAT_PAINTING2";
+export const MAT_PAINTING3 = "MAT_PAINTING3";
+export const MAT_PAINTING4 = "MAT_PAINTING4";
+export const MAT_PAINTING5 = "MAT_PAINTING5";
+export const MAT_PAINTING6 = "MAT_PAINTING6";
+export const MAT_PAINTING7 = "MAT_PAINTING7";
+export const MAT_PAINTING8 = "MAT_PAINTING8";
+export const MAT_PAINTING9 = "MAT_PAINTING9";
+export const PAINTING_RATIOS = {
+  MAT_PAINTING0: 1,
+  MAT_PAINTING1: 1,
+  MAT_PAINTING2: 1,
+  MAT_PAINTING3: 1,
+  MAT_PAINTING4: 1,
+  MAT_PAINTING5: 1,
+  MAT_PAINTING6: 1,
+  MAT_PAINTING7: 1,
+  MAT_PAINTING8: 1,
+  MAT_PAINTING9: 1,
+};
+
 let glass;
 
 export const PROCEDURAL_MATERIALS = [
@@ -145,5 +169,27 @@ export function addMaterials(scene) {
       ],
     });
     scene.addMaterial(starMat, SHADER_PROGRAM_RAY);
+  }
+
+  // painting mats
+  for (let i = 0; i < 10; i++) {
+    scene.addMaterial(
+      new RayMaterial(MAT_PAINTING + i, {
+        ka: [0.5, 0.5, 0.5],
+        kd: [0.5, 0.5, 0.5],
+        ks: [0.5, 0.5, 0.5],
+        refractiveIndex: 1.02,
+        textureMapLabel: IMAGE_TEXTURE_SET,
+        textureInformation: [
+          new RayTextureDescriptor(
+            TD.SOURCE_TEXTURE,
+            TD.BLEND_NORMAL,
+            TD.TEXTURE_ALBEDO,
+            8 + i,
+          ),
+        ],
+      }),
+      SHADER_PROGRAM_RAY,
+    );
   }
 }
