@@ -10,24 +10,26 @@ hw7.htmlDownload hw7.html
 
 Here is the starter code. It covers a sphere with diffuse surface and a cube with reflective surface. You can reuse the primitives, or implement your new primitives.
 
-- [] Ray tracing with local Phong, shadow, reflection and refraction (10 pts) 
+- [x] Ray tracing with local Phong, shadow, reflection and refraction (10 pts) 
     
     At least one geometry is transparent and glass-like (refraction). All the geometries need to be rendered through ray tracing with recursive process (use loop to simulate the recursive process as GLSL doesn't support recursive functions).
 
-    - [] local illumination (Phong). It is fine to only have Phong model partially implemented in order to get a more visually appealing effect. (1/11)
+    - [x] local illumination (Phong). It is fine to only have Phong model partially implemented in order to get a more visually appealing effect. (1/11)
     - [x] ray traced shadow (2/11)
     - [x] intersections (2/11)
-    - [x] reflection (2/11)
+    - [x] reflection (2/11) 
+        - 2 mirrors
     - [x] refraction (3/11) (It is fine to use any of "**choose**, blend or **sample**" refraction approaches we covered in class)
+        - refraction can be seen in the glassy materials: lava lamp, paintings, projector sphere.
     - attenuation is not necessary but encouraged.
 
 - [x] Multiple light sources (2 pts)
-    - []
+    - lava lamp, star projector
 
 - Interactive user interface and movements (1 pts)
+    - At least two additional user interfaces to control parameters or movements (e.g. bounce steps, lighting intensity, shininess, attenuation, etc.) 
     - [x] Scene editor allows updates to every object, material, light, shader program etc
     
-    At least two additional user interfaces to control parameters or movements (e.g. bounce steps, lighting intensity, shininess, attenuation, etc.) 
 
 - Outstanding visually effects or animation ( +1 bonus pts)
 

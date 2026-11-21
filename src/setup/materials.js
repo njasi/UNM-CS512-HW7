@@ -15,6 +15,8 @@ export const MAT_GLASS_TILE = "glassTile";
 export const MAT_WALLPAPER_DINO = "MAT_WALLPAPER_DINO";
 export const MAT_PROCEDURAL_POPCORN = "MAT_PROCEDURAL_POPCORN";
 export const MAT_CARPET = "MAT_CARPET";
+export const MAT_CEILING = "MAT_CEILING";
+export const MAT_MIRROR = "MAT_MIRROR";
 
 // star mat collection
 const MAT_STAR = "MAT_STAR";
@@ -49,6 +51,10 @@ export const PAINTING_RATIOS = {
   MAT_PAINTING9: 1,
 };
 
+export const MAT_METAL = "MAT_METAL";
+export const MAT_LAVA = "MAT_LAVA";
+export const MAT_GREEN_GLASS = "MAT_GREEN_GLASS";
+
 let glass;
 
 export const PROCEDURAL_MATERIALS = [
@@ -69,21 +75,55 @@ export function addMaterials(scene) {
     refractiveIndex: 2.42,
   });
 
-  let diffuse = new RayMaterial(MAT_GREEN_DIFFUSE, {
-    ka: [0, 1, 0],
+  const greenGlass = new RayMaterial(MAT_GREEN_GLASS, {
+    ka: rgb(16, 211, 5),
+    kd: rgb(16, 211, 5),
+    ks: [1, 1, 1],
+    refractiveIndex: 1.02,
+  });
+  const mirror = new RayMaterial(MAT_MIRROR, {
+    ka: [1, 1, 1],
+    kd: [1, 1, 1],
+    ks: [1, 1, 1],
+    reflectivity: 0.99,
+  });
+  const diffuse = new RayMaterial(MAT_GREEN_DIFFUSE, {
+    ka: [0, 0, 0],
     kd: [0, 1, 0],
     ks: [0, 1, 0],
   });
 
-  let wood = new RayMaterial(MAT_WOOD, {
-    ka: rgb(129, 60, 33),
+  const lava = new RayMaterial(MAT_LAVA, {
+    ka: rgb(16, 211, 5),
+    kd: rgb(16, 211, 5),
+    ks: [0, 0, 1],
+    refractiveIndex: 1.0,
+  });
+
+  const ceiling = new RayMaterial(MAT_CEILING, {
+    ka: [0, 0, 0],
+    kd: rgb(226, 222, 255),
+    ks: [0, 0, 1],
+    refractiveIndex: 1.0,
+  });
+
+  const metal = new RayMaterial(MAT_METAL, {
+    ka: [0, 0, 0],
+    kd: rgb(90, 90, 90),
+    ks: [1, 1, 1],
+    refractiveIndex: 1.0,
+    reflectivity:0.2
+  });
+
+  const wood = new RayMaterial(MAT_WOOD, {
+    ka: [0, 0, 0],
     kd: rgb(129, 60, 33),
     ks: [0, 1, 0],
   });
 
   // test see if we can call a texture function
   // defined in the shader
-  let glassTile = new RayMaterial(MAT_GLASS_TILE, {
+  const glassTile = new RayMaterial(MAT_GLASS_TILE, {
     ka: [1, 0, 1],
     kd: [1, 0, 1],
     ks: [1, 0, 1],
@@ -98,8 +138,8 @@ export function addMaterials(scene) {
     ],
   });
 
-  let wallpaperMaterial = new RayMaterial(MAT_WALLPAPER_DINO, {
-    ka: [0.5, 0.5, 0.5],
+  const wallpaperMaterial = new RayMaterial(MAT_WALLPAPER_DINO, {
+    ka: [0, 0, 0],
     kd: [0.5, 0.5, 0.5],
     ks: [0.5, 0.5, 0.5],
     textureMapLabel: IMAGE_TEXTURE_SET,
@@ -113,8 +153,8 @@ export function addMaterials(scene) {
     ],
   });
 
-  let carpetMaterial = new RayMaterial(MAT_CARPET, {
-    ka: [0.5, 0.5, 0.5],
+  const carpetMaterial = new RayMaterial(MAT_CARPET, {
+    ka: [0, 0, 0],
     kd: [0.5, 0.5, 0.5],
     ks: [0.5, 0.5, 0.5],
     textureMapLabel: IMAGE_TEXTURE_SET,
@@ -129,7 +169,7 @@ export function addMaterials(scene) {
   });
 
   const proceduralPopcorn = new RayMaterial(MAT_PROCEDURAL_POPCORN, {
-    ka: [0.5, 0.5, 0.5],
+    ka: [0, 0, 0],
     kd: [0.5, 0.5, 0.5],
     ks: [0.5, 0.5, 0.5],
     textureMapLabel: PROCEDURAL_TEXTURE_SET,
@@ -144,7 +184,12 @@ export function addMaterials(scene) {
   });
 
   scene.addMaterial(wood, SHADER_PROGRAM_RAY);
+  scene.addMaterial(lava, SHADER_PROGRAM_RAY);
+  scene.addMaterial(metal, SHADER_PROGRAM_RAY);
   scene.addMaterial(glass, SHADER_PROGRAM_RAY);
+  scene.addMaterial(ceiling, SHADER_PROGRAM_RAY);
+  scene.addMaterial(greenGlass, SHADER_PROGRAM_RAY);
+  scene.addMaterial(mirror, SHADER_PROGRAM_RAY);
   scene.addMaterial(diffuse, SHADER_PROGRAM_RAY);
   scene.addMaterial(glassTile, SHADER_PROGRAM_RAY);
   scene.addMaterial(wallpaperMaterial, SHADER_PROGRAM_RAY);
@@ -175,7 +220,7 @@ export function addMaterials(scene) {
   for (let i = 0; i < 10; i++) {
     scene.addMaterial(
       new RayMaterial(MAT_PAINTING + i, {
-        ka: [0.5, 0.5, 0.5],
+        ka: [1, 1, 1],
         kd: [0.5, 0.5, 0.5],
         ks: [0.5, 0.5, 0.5],
         refractiveIndex: 1.02,

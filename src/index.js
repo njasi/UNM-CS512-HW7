@@ -64,7 +64,7 @@ async function main() {
 
   makeEditorTabs(scene);
 
-  scene.getProgram(SHADER_PROGRAM_RAY).uniforms.u_ambientStrength = 0.001;
+  scene.getProgram(SHADER_PROGRAM_RAY).uniforms.u_ambientStrength = 0.99;
   requestAnimationFrame(scene.render);
 }
 
