@@ -7,12 +7,12 @@ import {
   MAT_CEILING,
   MAT_METAL,
   MAT_MIRROR,
-} from "./materials";
+} from "../materials";
 import { Scene } from "PotatoEngine";
-import { SHADER_PROGRAM_RAY } from "./programs";
+import { SHADER_PROGRAM_RAY } from "../programs";
 import { addLavaLamp } from "./lavalamp";
 import { addProjector } from "./projector";
-import { addPainting } from "./painting";
+import { addPainting, addPaintings } from "./painting";
 
 const { RayObject } = require("PotatoEngine/src/objects");
 
@@ -38,11 +38,7 @@ export function initSceneObjects(scene) {
   addLavaLamp(scene, [15, -5.5, -25]);
   addRoomDecorations(scene);
   addSiding(scene);
-
-
-  for (let i = 0; i < 10; i++) {
-    addPainting(scene, MAT_PAINTING + i, Math.random() * 2 + 0.5);
-  }
+  addPaintings(scene)
 }
 
 function initRoomShape(scene) {

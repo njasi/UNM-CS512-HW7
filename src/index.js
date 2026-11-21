@@ -12,18 +12,16 @@ const {
 const { addMaterials, PROCEDURAL_MATERIALS } = require("./setup/materials");
 const { addTextures } = require("./setup/textures");
 const { initSceneObjects } = require("./setup/objects");
-const {
-  addPrograms,
-  SHADER_PROGRAM_RAY,
-} = require("./setup/programs");
+const { addPrograms, SHADER_PROGRAM_RAY } = require("./setup/programs");
 const { ProceduralMaterial } = require("PotatoEngine/src/materials");
+const { setupInputControls } = require("./setup/controls");
 
 const scene = new Scene("glcanvas");
 scene.camera.fov = 0.6;
 scene.camera.speed = 20;
-scene.camera.move(-25,-1,-22)
-scene.camera.yaw = 0.8
-scene.camera.pitch = 0.1
+scene.camera.move(-25, -1, -22);
+scene.camera.yaw = 0.8;
+scene.camera.pitch = 0.1;
 
 flight.setupMouseControls(scene, {
   scalePitch: 1,
@@ -61,6 +59,7 @@ async function main() {
   await scene.load();
 
   initSceneObjects(scene);
+  setupInputControls(scene);
 
   makeEditorTabs(scene);
 

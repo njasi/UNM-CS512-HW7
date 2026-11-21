@@ -1,10 +1,6 @@
-import { addObj } from "./util";
+import { addObj } from "../util";
 import { RayObject } from "PotatoEngine/src/objects";
-import {
-  MAT_GREEN_GLASS,
-  MAT_METAL,
-  MAT_LAVA,
-} from "./materials";
+import { MAT_GREEN_GLASS, MAT_METAL, MAT_LAVA } from "../materials";
 
 let lavaLampIndex = 0;
 
@@ -74,7 +70,7 @@ export function addLavaLamp(scene, position) {
         position: [x, y + 2.5, z],
         materialLabel: MAT_LAVA,
         castShadow: false,
-        faces: 5
+        faces: 5,
         // light: true,
         // lightPower: 0.1,
       },

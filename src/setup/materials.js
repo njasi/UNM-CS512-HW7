@@ -13,6 +13,7 @@ export const MAT_WOOD = "wood";
 export const MAT_GREEN_DIFFUSE = "greenDiffuse";
 export const MAT_GLASS_TILE = "glassTile";
 export const MAT_WALLPAPER_DINO = "MAT_WALLPAPER_DINO";
+export const MAT_CLEAR_DINO = "MAT_CLEAR_DINO";
 export const MAT_PROCEDURAL_POPCORN = "MAT_PROCEDURAL_POPCORN";
 export const MAT_CARPET = "MAT_CARPET";
 export const MAT_CEILING = "MAT_CEILING";
@@ -40,7 +41,7 @@ export const MAT_PAINTING8 = "MAT_PAINTING8";
 export const MAT_PAINTING9 = "MAT_PAINTING9";
 export const PAINTING_RATIOS = {
   MAT_PAINTING0: 1,
-  MAT_PAINTING1: 1,
+  MAT_PAINTING1: 675 / 517,
   MAT_PAINTING2: 1,
   MAT_PAINTING3: 1,
   MAT_PAINTING4: 1,
@@ -82,7 +83,7 @@ export function addMaterials(scene) {
     refractiveIndex: 1.02,
   });
   const mirror = new RayMaterial(MAT_MIRROR, {
-    ka: [1, 1, 1],
+    ka: [0.5, 0.5, 0.5],
     kd: [1, 1, 1],
     ks: [1, 1, 1],
     reflectivity: 0.99,
@@ -112,7 +113,7 @@ export function addMaterials(scene) {
     kd: rgb(90, 90, 90),
     ks: [1, 1, 1],
     refractiveIndex: 1.0,
-    reflectivity:0.2
+    reflectivity: 0.2,
   });
 
   const wood = new RayMaterial(MAT_WOOD, {
@@ -142,6 +143,22 @@ export function addMaterials(scene) {
     ka: [0, 0, 0],
     kd: [0.5, 0.5, 0.5],
     ks: [0.5, 0.5, 0.5],
+    textureMapLabel: IMAGE_TEXTURE_SET,
+    textureInformation: [
+      new RayTextureDescriptor(
+        TD.SOURCE_TEXTURE,
+        TD.BLEND_NORMAL,
+        TD.TEXTURE_ALBEDO,
+        0,
+      ),
+    ],
+  });
+
+  const dinoClear = new RayMaterial(MAT_CLEAR_DINO, {
+    ka: [0, 0, 0],
+    kd: [0.5, 0.5, 0.5],
+    ks: [0.5, 0.5, 0.5],
+    refractiveIndex:1.02,
     textureMapLabel: IMAGE_TEXTURE_SET,
     textureInformation: [
       new RayTextureDescriptor(
@@ -188,6 +205,7 @@ export function addMaterials(scene) {
   scene.addMaterial(metal, SHADER_PROGRAM_RAY);
   scene.addMaterial(glass, SHADER_PROGRAM_RAY);
   scene.addMaterial(ceiling, SHADER_PROGRAM_RAY);
+  scene.addMaterial(dinoClear, SHADER_PROGRAM_RAY);
   scene.addMaterial(greenGlass, SHADER_PROGRAM_RAY);
   scene.addMaterial(mirror, SHADER_PROGRAM_RAY);
   scene.addMaterial(diffuse, SHADER_PROGRAM_RAY);

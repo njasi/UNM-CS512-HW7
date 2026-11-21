@@ -105,7 +105,69 @@
 
         <div id="default-editor-controls">
           <div class="controls mt-0">
+            <label>
+              Max Bounces
+              <input class="uniform-input" name="u_maxBounces" value="5" type="range" max="32" min="0" step="1"></input>
+              <code id="u_maxBounces-value">5</code>
+            </label>
+            <label>
+              Ambient Strength
+              <input class="uniform-input" name="u_ambientStrength" value="0.99" type="range" max="1" min="0"
+                step="0.05"></input>
+              <code id="u_ambientStrength-value">0.99</code>
+            </label>
+            <label>
+              Ray Samples
+              <input class="uniform-input" name="u_raySamples" value="2" type="range" max="16" min="0" step="1"></input>
+              <code id="u_raySamples-value">2</code>
+            </label>
+            <label>
+              Shadow Layers
+              <input class="uniform-input" name="u_maxShadowLayers" value="8" type="range" max="16" min="0"
+                step="1"></input>
+              <code id="u_maxShadowLayers-value">8</code>
+            </label>
+            <!-- <label>
+              Main Light Power
+              <input id="lightPower" name="lightPower" value="3" type="range" max="200" min="0" step="1"></input>
+              <code id="lightPower-value">3</code>
+            </label> -->
 
+            <br>
+            <label>
+              Glass Mode
+              <select class="uniform-input" name="u_glassMode">
+                <option value="2">Monte Carlo</option>
+                <option value="0">Dominant Branch</option>
+                <!-- <option value="1">Contribution</option> -->
+                <option value="3">Glass = Diffuse</option>
+              </select>
+            </label>
+            <label>
+              Shadow Mode
+              <select class="uniform-input" name="u_shadowMode">
+                <option value="1">Fast Glass</option>
+                <option value="2">Simple Glass</option>
+                <option value="3">TIR Glass</option>
+                <option value="0">Fast</option>
+              </select>
+            </label>
+            <br>
+            <label>
+              Projector Texture
+              <select id="projectorTexSel">
+                <option value="MAT_STAR2">Simple Stars</option>
+                <option value="MAT_STAR0">Milky Way (Full)</option>
+                <option value="MAT_STAR1">Milky Way (Arm) </option>
+                <option value="MAT_STAR3">Stars </option>
+                <option value="MAT_STAR4">Cartoon Stars </option>
+                <option value="MAT_STAR5">Milky Way </option>
+                <option value="MAT_CLEAR_DINO">Dinosaur</option>
+              </select>
+            </label>
+            <!-- <label>
+              <button id="paintingReset">Reroll Paintings</button>
+            </label> -->
           </div>
         </div>
         <div id="editor-panel-body">

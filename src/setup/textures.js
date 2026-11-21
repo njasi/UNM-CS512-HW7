@@ -22,16 +22,16 @@ export function addTextures(scene) {
   textureSet.load("./public/textures/stars_3_1024.jpg", 5);
   textureSet.load("./public/textures/stars_cartoon_1024.jpg", 6);
   textureSet.load("./public/textures/milky_1024.jpg", 7);
-  textureSet.load("./public/textures/boldandbrash_square.jpg", 8);
-  textureSet.load("./public/textures/boldandbrash_square.jpg", 9);
-  textureSet.load("./public/textures/boldandbrash_square.jpg", 10);
-  textureSet.load("./public/textures/boldandbrash_square.jpg", 11);
-  textureSet.load("./public/textures/boldandbrash_square.jpg", 12);
-  textureSet.load("./public/textures/boldandbrash_square.jpg", 13);
-  textureSet.load("./public/textures/boldandbrash_square.jpg", 14);
-  textureSet.load("./public/textures/boldandbrash_square.jpg", 15);
-  textureSet.load("./public/textures/boldandbrash_square.jpg", 16);
-  textureSet.load("./public/textures/boldandbrash_square.jpg", 17);
+  textureSet.load("./public/textures/paintings/boldandbrash_square.jpg", 8);
+  textureSet.load("./public/textures/paintings/raven_1024.png", 9);
+  textureSet.load("./public/textures/paintings/moose_1024.png", 10);
+  textureSet.load("./public/textures/paintings/boldandbrash_square.jpg", 11);
+  textureSet.load("./public/textures/paintings/boldandbrash_square.jpg", 12);
+  textureSet.load("./public/textures/paintings/boldandbrash_square.jpg", 13);
+  textureSet.load("./public/textures/paintings/boldandbrash_square.jpg", 14);
+  textureSet.load("./public/textures/paintings/boldandbrash_square.jpg", 15);
+  textureSet.load("./public/textures/paintings/boldandbrash_square.jpg", 16);
+  textureSet.load("./public/textures/paintings/boldandbrash_square.jpg", 17);
 
   scene.addTexture(IMAGE_TEXTURE_SET, textureSet, { load: false });
 }

@@ -1,6 +1,6 @@
 import { RayObject } from "PotatoEngine/src/objects";
 import { RENDER_PASS_RAY } from "PotatoEngine/src/renderers";
-import { SHADER_PROGRAM_RAY } from "./programs";
+import { SHADER_PROGRAM_RAY } from "../programs";
 import {
   MAT_WOOD,
   MAT_PAINTING0,
@@ -14,7 +14,8 @@ import {
   MAT_PAINTING8,
   MAT_PAINTING9,
   PAINTING_RATIOS,
-} from "./materials";
+  MAT_PAINTING,
+} from "../materials";
 
 let paintingIndex = 0;
 export function addPainting(scene, textureLabel, size = 1) {
@@ -97,4 +98,19 @@ export function addPainting(scene, textureLabel, size = 1) {
   scene.addObject(canvas, SHADER_PROGRAM_RAY, undefined, {
     passes: [RENDER_PASS_RAY],
   });
+}
+
+/**
+ * Add paintings to scene randomly
+ * @param {*} scene
+ */
+export function addPaintings(scene) {
+  paintingIndex = 0;
+
+  for (let i = 0; i < 10; i++) {
+    // scene.removeObject("paintingFrame" + i);
+    // scene.removeObject("paintingCanvas" + i);
+
+    addPainting(scene, MAT_PAINTING + i, Math.random() * 2 + 0.5);
+  }
 }

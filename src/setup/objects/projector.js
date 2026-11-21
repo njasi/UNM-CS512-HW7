@@ -1,7 +1,10 @@
 import { RayObject } from "PotatoEngine/src/objects";
-import { MAT_METAL, MAT_STAR2 } from "./materials";
+import { MAT_METAL, MAT_STAR2 } from "../materials";
 import { RENDER_PASS_RAY } from "PotatoEngine/src/renderers";
-import { SHADER_PROGRAM_RAY } from "./programs";
+import { SHADER_PROGRAM_RAY } from "../programs";
+
+export const OBJECT_PROJECTOR_ORB = "OBJECT_PROJECTOR_ORB";
+export const OBJECT_PROJECTOR_LIGHT = "OBJECT_PROJECTOR_LIGHT";
 
 /**
  * Add the star projector to the scene
@@ -10,7 +13,7 @@ import { SHADER_PROGRAM_RAY } from "./programs";
 export function addProjector(scene, position = [0, 0, 0]) {
   const [x, y, z] = position;
   let projectorOrb = new RayObject(
-    "projectorOrb",
+    OBJECT_PROJECTOR_ORB,
     RayObject.OBJECT_TYPE_SPHERE,
     {
       radius: 2,
@@ -22,7 +25,7 @@ export function addProjector(scene, position = [0, 0, 0]) {
   projectorOrb.setUpdateCB(updateProjector);
 
   let projectorLight = new RayObject(
-    "projectorLight",
+    OBJECT_PROJECTOR_LIGHT,
     RayObject.OBJECT_TYPE_SPHERE,
     {
       radius: 1,
