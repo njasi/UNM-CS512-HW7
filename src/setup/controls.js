@@ -31,9 +31,9 @@ export function setupInputControls(scene) {
     starOrb.materialLabel = e.target.value;
   });
 
-  document.getElementById("paintingReset").addEventListener("input", e => {
-    addPaintings(scene)
-  })
+  // document.getElementById("paintingReset").addEventListener("input", e => {
+  //   addPaintings(scene)
+  // })
 
   // document.getElementById("lightPower").addEventListener("input", (e) => {
   //   lightSphere.lightPower = e.target.value;
